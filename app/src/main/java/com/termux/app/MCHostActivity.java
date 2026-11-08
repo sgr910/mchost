@@ -305,6 +305,15 @@ public class MCHostActivity extends Activity {
 
     // ------------------------------------------------- execução de comandos
     private Process spawn(String script) throws Exception {
+        // O pacote-base não traz ~ nem tmp: sem eles o exec falha com "error=2" mesmo com o bash presente.
+        new File(HOME).mkdirs();
+        new File(PREFIX, "tmp").mkdirs();
+        File bash = new File(BASH);
+        if (!bash.exists()) {
+            throw new java.io.IOException("O bash do Termux não está em " + BASH
+                    + " (pacote-base não foi instalado). Feche o app, limpe os dados dele em"
+                    + " Configurações > Apps > MCHost > Armazenamento e abra de novo.");
+        }
         ProcessBuilder pb = new ProcessBuilder(BASH, "-c", script);
         pb.directory(new File(HOME));
         pb.redirectErrorStream(true);
