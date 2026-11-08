@@ -268,7 +268,7 @@ public class MCHostActivity extends Activity {
     private void autoLogin(int attempt) {
         if (!alive || attempt > 10 || web == null) return;
         String js = "(function(){var l=document.getElementById('login');"
-                + "if(l&&l.classList.contains('on')){document.getElementById('pw').value='" + panelPassword() + "';"
+                + "if(l&&l.classList.contains('on')&&localStorage.getItem('noauto')!=='1'){document.getElementById('pw').value='" + panelPassword() + "';"
                 + "doLogin({preventDefault:function(){}});return 'tentou';}return l?'ok':'sem-painel';})()";
         web.evaluateJavascript(js, null);
         ui.postDelayed(() -> autoLogin(attempt + 1), 700);
